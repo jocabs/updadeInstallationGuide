@@ -1,0 +1,61 @@
+sudo apt-get update
+    2  lsb -a releasee
+    3  sudo wget https://repo.zabbix.com/zabbix/7.4/release/debian/pool/main/z/zabbix-release/zabbix-release_latest_7.4+debian12_all.deb
+    4  sudo dpkg -i zabbix-release_latest_7.4+debian12_all.deb
+    5  sudo apt update
+    6  sudo install zabbix-server-mysql zabbix-frontend-php zabbix-apache-conf zabbix-sql-scripts zabbix-agent
+    7  ls
+    8  sudo apt update
+    9  sudo apt install zabbix-server-mysql zabbix-frontend-php zabbix-apache-conf zabbix-sql-scripts zabbix-agent
+   10  sudo zabbix_server -V
+   11  lsb_release -a
+   12  wget http://security.ubuntu.com/ubuntu/pool/main/o/openldap/libldap-2.5-0_2.5.16+dfsg-0ubuntu0.22.04.2_amd64.deb
+   13  sudo apt install zabbix-server-mysql zabbix-frontend-php zabbix-apache-conf zabbix-sql-scripts zabbix-agent
+   14  wget http://security.ubuntu.com/ubuntu/pool/main/o/openldap/libldap-2.5-0_2.5.16+dfsg-0ubuntu0.22.04.2_amd64.deb
+   15  ls
+   16  sudo rm libldap-2.5-0_2.5.16+dfsg-0ubuntu0.22.04.2_amd64.deb.1
+   17  ls
+   18  sudo dpkg -i libldap-2.5-0_2.5.16+dfsg-0ubuntu0.22.04.2_amd64.deb
+   19  sudo apt install zabbix-server-mysql zabbix-frontend-php zabbix-apache-conf zabbix-sql-scripts zabbix-agent
+   20  sudo zabbix_server -V
+   21  sudo systemctl status zabbix-server
+   22  sudo systemctl start zabbix-server
+   23  sudo systemctl enable zabbix-server
+   24  sudo journalctl -u zabbix-server -f
+   25  sudo systemctl status zabbix-server
+   26  sudo apt install zabbix-agent zabbix-server-mysql snmpd
+   27  sudo apt install mysql-server
+   28  mysql --version
+   29  sudo systemctl enable mysql
+   30  sudo systemctl start mysql
+   31  sudo mysql_secure_installation
+   32  sudo mysql -u root -p
+   33  sudo mysql -u czabbix -p Cz@bb1x#2025
+   34  sudo mysql -u czabbix -p
+   35  sudo zcat /usr/share/zabbix/sql-scripts/mysql/server.sql.gz | mysql --default-character-set=utf8mb4 -uzabbix -p
+   36  sudo zcat /usr/share/zabbix/sql-scripts/mysql/server.sql.gz | mysql --default-character-set=utf8mb4 -uczabbix -p
+   37  ls /usr/share/
+   38  sudo zcat /usr/share/zabbix/sql-scripts/mysql/server.sql.gz | mysql --default-character-set=utf8mb4 -uczabbix -p zabbix
+   39  sudo mysql -u root -p
+   40  sudo zcat /usr/share/zabbix/sql-scripts/mysql/server.sql.gz | mysql --default-character-set=utf8mb4 -uczabbix -p zabbix
+   41  sudo systemctl enable zabbix-server zabbix-agent apache2
+   42  sudo systemctl status zabbix-server
+   43  sudo systemctl status apache2
+   44  sudo systemctl status zabbix-server
+   45  sudo tail -n 50 /var/log/apache2/error.log
+   46  sudo tail -n 50 /var/log/nginx/error.log
+   47  sudo systemctl status apache2
+   48  sudo netstat -tulnp | grep apache2
+   49  sudo ss -tulnp | grep apache2
+   50  sudo ufw status
+   51  curl -I http://localhost
+   52  sudo ufw status
+   53  history
+   54  ls
+   55  sudo reboot
+   56  sudo apt update
+   57  ls
+   58  history
+   59  mysql --version
+   60  exit
+   61  ls
