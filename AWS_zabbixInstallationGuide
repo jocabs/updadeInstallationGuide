@@ -59,3 +59,9 @@ sudo apt-get update
    59  mysql --version
    60  exit
    61  ls
+
+
+########## for backup
+BACKUP_DATE=$(date +'%Y%m%d_%H%M%S')
+sudo bash -c "mysqldump -u root -p zabbix > /var/backups/zabbix_backup_$BACKUP_DATE.sql"
+NOTE: the backup directory is /var/backups/zabbix_backup_$BACKUP_DATE.sql
