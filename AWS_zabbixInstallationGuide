@@ -61,7 +61,12 @@ sudo apt-get update
    61  ls
 
 
-########## for backup
+########## for backup ########
 BACKUP_DATE=$(date +'%Y%m%d_%H%M%S')
 sudo bash -c "mysqldump -u root -p zabbix > /var/backups/zabbix_backup_$BACKUP_DATE.sql"
 NOTE: the backup directory is /var/backups/zabbix_backup_$BACKUP_DATE.sql
+
+######### for upgrade/update new release ########
+sudo apt list --upgradable | grep zabbix
+sudo apt install --only-upgrade zabbix-server-mysql zabbix-frontend-php zabbix-apache-conf zabbix-sql-scripts zabbix-agent
+
