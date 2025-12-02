@@ -9,3 +9,241 @@ ii  zabbix-release                       1:7.4-1+ubuntu24.04                    
 ii  zabbix-server-mysql                  1:7.4.5-2+ubuntu24.04                   amd64        Zabbix network monitoring solution - server (MySQL)
 ii  zabbix-sql-scripts                   1:7.4.5-2+ubuntu24.04                   all          Zabbix network monitoring solution - sql-scripts
 ii  zabbix-web-service                   1:7.4.5-2+ubuntu24.04                   amd64        Zabbix network monitoring solution - web-service
+
+                   ┌─────────────────────┐
+                   │    Zabbix Frontend   │
+                   │   (PHP Web Interface)│
+                   └─────────┬───────────┘
+                             │ HTTP (Apache)
+                             ▼
+                   ┌─────────────────────┐
+                   │   Zabbix Web Service │
+                   │  (API / Backend)     │
+                   └─────────┬───────────┘
+                             │
+                             ▼
+                   ┌─────────────────────┐
+                   │   Zabbix Server      │
+                   │   (Monitoring Engine)│
+                   └─────────┬───────────┘
+                             │
+                   SQL Queries│
+                             ▼
+                   ┌─────────────────────┐
+                   │   MySQL Database     │
+                   │   (zabbix DB)        │
+                   └─────────────────────┘
+Explanation of Flow
+Zabbix Frontend (PHP + Apache)
+Users access via browser (http://<server-ip>/zabbix)
+Sends requests to Zabbix Web Service
+
+Zabbix Web Service
+Handles frontend requests, interacts with Zabbix Server
+Acts as API layer
+
+Zabbix Server
+Core monitoring engine
+Processes collected metrics (from agents or SNMP devices if added later)
+Stores data in MySQL Database
+
+MySQL Database
+Stores all configuration, metrics history, alerts, and frontend data
+
+1. zabbix-server
+Package: zabbix-server-mysql (or zabbix-server-pgsql if using PostgreSQL)
+Role:
+Core monitoring engine
+Collects and processes all metrics from agents, SNMP, IPMI, or other data sources
+Evaluates triggers, events, and alerts
+Stores processed data in the database
+Responsible for: The actual generation of metrics and events that feed into reports.
+
+2. zabbix-web-service
+Package: zabbix-web-service
+Role:
+Backend for the Zabbix frontend (PHP)
+Handles API requests from the frontend and external integrations
+Queries the server and database to prepare data for dashboards and reports
+Responsible for: Serving report data to the frontend. Without it, the web interface cannot display charts, graphs, or dashboards.
+
+3. zabbix-frontend-php + zabbix-apache-conf
+Packages: zabbix-frontend-php (PHP code) + zabbix-apache-conf (Apache config)
+Role:
+Provides the web interface to display reports, dashboards, and charts
+Uses PHP to render HTML pages and interact with the web-service API
+Responsible for: Displaying reports visually to users.
+
+Summary Table
+Service / Package	Handles	Role in Reporting
+zabbix-server-mysql	Server engine	Processes metrics, triggers, events
+zabbix-web-service	API backend	Fetches data for frontend dashboards
+zabbix-frontend-php	PHP frontend	Renders reports, graphs, dashboards
+zabbix-apache-conf	Apache web server	Serves the frontend over HTTP/S
+Key Point
+
+zabbix-agent / zabbix-agent2 are not involved in reporting. They only collect data.
+All reporting happens on the server + web-service + frontend stack.
+
+        ┌─────────────────────┐
+        │  Zabbix Server      │
+        │  (zabbix-server)    │
+        │                     │
+        │ - Processes metrics │
+        │ - Evaluates triggers│
+        │ - Generates events  │
+        └─────────┬───────────┘
+                  │ Queries / Data
+                  ▼
+        ┌─────────────────────┐
+        │ Zabbix Web Service  │
+        │  (zabbix-web-service) │
+        │                     │
+        │ - Backend API       │
+        │ - Prepares data for│
+        │   frontend          │
+        └─────────┬───────────┘
+                  │ HTTP / API
+                  ▼
+        ┌─────────────────────┐
+        │ Zabbix Frontend     │
+        │  (PHP + Apache)     │
+        │                     │
+        │ - Renders dashboards│
+        │ - Displays graphs   │
+        │ - Generates reports │
+        └─────────────────────┘
+Flow Explanation
+
+Zabbix Server
+
+Core engine that collects and processes all data (from agents, SNMP, IPMI, etc.).
+
+Generates triggers, events, and stores results in the database.
+
+Zabbix Web Service
+
+Acts as a backend API.
+
+Fetches processed metrics, triggers, and events from the server/database.
+
+Prepares the data for the frontend in a format suitable for dashboards and reports.
+
+Zabbix Frontend (PHP + Apache)
+
+Displays the final data in the web interface.
+
+Users interact with dashboards, charts, and reports through their browser.
+
+✅ Key takeaway:
+
+Reporting is entirely handled by the server + web-service + frontend stack.
+
+
+1️⃣ Zabbix Server
+
+Service: zabbix-server
+
+Package: zabbix-server-mysql
+
+Role: Core monitoring engine
+
+Processes incoming metrics (agents, SNMP, etc.)
+
+Evaluates triggers and events
+
+Stores data in the database
+
+Not related to PHP — this is pure backend processing.
+
+2️⃣ Zabbix Web Service
+
+Service: zabbix-web-service
+
+Package: zabbix-web-service
+
+Role:
+
+Acts as a backend API for the frontend
+
+Fetches processed data from the server
+
+Prepares dashboards, graphs, and reports for PHP frontend
+
+Not PHP itself, but feeds the PHP frontend.
+
+3️⃣ Zabbix Frontend (PHP)
+
+Package: zabbix-frontend-php
+
+Package: zabbix-apache-conf (Apache configuration for Zabbix frontend)
+
+Role:
+
+Renders dashboards, reports, and graphs in a web browser
+
+PHP scripts generate the HTML pages for the frontend
+
+Interacts with Zabbix Web Service via API
+
+Handled by Apache + PHP:
+
+Apache serves PHP pages
+
+PHP executes scripts from zabbix-frontend-php
+
+4️⃣ Database (MySQL)
+
+Package: MySQL / MariaDB
+
+Role:
+
+Stores all monitoring data, configuration, historical trends, alerts
+
+Queried by Zabbix Server and indirectly by Web Service / PHP frontend
+
+Service Map for Reporting
+          ┌───────────────┐
+          │   Browser     │
+          │ (User Access) │
+          └──────┬────────┘
+                 │ HTTP/HTTPS
+                 ▼
+          ┌───────────────┐
+          │   Apache      │
+          │ (Frontend)    │
+          └──────┬────────┘
+                 │ Executes PHP scripts
+                 ▼
+          ┌───────────────┐
+          │ Zabbix PHP    │
+          │ Frontend      │
+          └──────┬────────┘
+                 │ API calls
+                 ▼
+          ┌───────────────┐
+          │ Zabbix Web    │
+          │ Service       │
+          └──────┬────────┘
+                 │ Queries
+                 ▼
+          ┌───────────────┐
+          │ Zabbix Server │
+          │ (Monitoring)  │
+          └──────┬────────┘
+                 │ SQL
+                 ▼
+          ┌───────────────┐
+          │ MySQL Database│
+          └───────────────┘
+
+✅ Summary
+
+PHP + Apache: Only for the frontend (zabbix-frontend-php + zabbix-apache-conf)
+
+Web Service: Prepares data for PHP, handles API calls
+
+Server: Processes metrics and triggers, stores in DB
+
+Database: Persistent storage for all data
+Agents only feed raw data, they don’t participate in report generation.
