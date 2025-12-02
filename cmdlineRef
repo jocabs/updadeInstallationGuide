@@ -1,0 +1,11 @@
+Zabbix server log ### sudo tail -n 50 /var/log/zabbix/zabbix_server.log 
+
+dpkg -l | grep zabbix
+ii  zabbix-agent                         1:7.4.5-2+ubuntu24.04                   amd64        Zabbix network monitoring solution - agent
+ii  zabbix-agent2                        1:7.4.5-2+ubuntu24.04                   amd64        Zabbix network monitoring solution - agent
+ii  zabbix-apache-conf                   1:7.4.5-2+ubuntu24.04                   all          Zabbix network monitoring solution - apache configuration for front-end
+ii  zabbix-frontend-php                  1:7.4.5-2+ubuntu24.04                   all          Zabbix network monitoring solution - PHP front-end
+ii  zabbix-release                       1:7.4-1+ubuntu24.04                     all          Zabbix official repository configuration
+ii  zabbix-server-mysql                  1:7.4.5-2+ubuntu24.04                   amd64        Zabbix network monitoring solution - server (MySQL)
+ii  zabbix-sql-scripts                   1:7.4.5-2+ubuntu24.04                   all          Zabbix network monitoring solution - sql-scripts
+ii  zabbix-web-service                   1:7.4.5-2+ubuntu24.04                   amd64        Zabbix network monitoring solution - web-service
