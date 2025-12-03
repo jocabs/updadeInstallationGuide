@@ -1,0 +1,26 @@
+sudo cat /etc/zabbix/zabbix_server.conf
+DBHost=localhost
+DBName=zabbix
+DBUser=zabbix
+DBPassword=Z@bb1x$!2025
+PidFile=/var/run/zabbix/zabbix_server.pid
+LogFile=/var/log/zabbix/zabbix_server.log
+StartReportWriters=1
+WebServiceURL=http://127.0.0.1:10053/report
+ListenIP=127.0.0.1
+ListenPort=10051
+
+
+For Test
+
+DBHost=localhost
+DBName=zabbix
+DBUser=zabbix
+DBPassword=Z@bb1x$!2025
+PidFile=/var/run/zabbix/zabbix_server.pid
+LogFile=/var/log/zabbix/zabbix_server.log
+StartReportWriters=1
+WebServiceURL=http://127.0.0.1:10053/report
+ListenIP=127.0.0.1
+ListenPort=10051
+AllowedIP=127.0.0.1,::1
