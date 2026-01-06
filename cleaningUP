@@ -1,1 +1,48 @@
+1️⃣ Optional: Remove the Zabbix repository package
+sudo apt purge -y zabbix-release
+sudo apt update
 
+2️⃣ Verify final cleanup
+dpkg -l | grep zabbix
+sudo mysql -uroot -p -e "SHOW DATABASES;"
+
+3️⃣ Check Zabbix directories
+Look for any leftover config, log, or data directories:
+sudo ls -l /etc/zabbix /var/lib/zabbix /var/log/zabbix /usr/share/zabbix
+
+If any exist, they are leftover files.
+You can remove them with:
+sudo rm -rf /etc/zabbix /var/lib/zabbix /var/log/zabbix /usr/share/zabbix
+
+4️⃣ Check running processes
+ps aux | grep zabbix
+
+5️⃣ Optional: Check apt sources
+grep -r zabbix /etc/apt/sources.list /etc/apt/sources.list.d/
+
+If you see entries for Zabbix, the repo is still configured.
+Remove it with:
+sudo apt purge -y zabbix-release
+sudo apt update
+############REMAINING FILES##############
+
+1️⃣ Check common Zabbix directories
+Run:
+sudo ls -ld /etc/zabbix /var/lib/zabbix /var/log/zabbix /usr/share/zabbix
+
+If any of these exist, you’ll see a directory listing.
+If they don’t exist, you’ll see No such file or directory. ✅
+
+2️⃣ Remove leftover directories (if they exist)
+sudo rm -rf /etc/zabbix /var/lib/zabbix /var/log/zabbix /usr/share/zabbix
+
+This deletes all remaining Zabbix configs, data, logs, and frontend files.
+Safe because we already removed the database and packages.
+
+3️⃣ Check for stray files elsewhere
+sudo find / -iname "*zabbix*" 2>/dev/null
+
+This searches the entire filesystem for any files or folders with “zabbix” in the name.
+The 2>/dev/null hides permission errors.
+Any entries that appear here are usually safe to delete if you no longer need Zabbix:
+sudo rm -rf /path/to/entry
