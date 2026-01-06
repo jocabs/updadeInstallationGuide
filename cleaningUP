@@ -47,3 +47,6 @@ This searches the entire filesystem for any files or folders with “zabbix” i
 The 2>/dev/null hides permission errors.
 Any entries that appear here are usually safe to delete if you no longer need Zabbix:
 sudo rm -rf /path/to/entry
+
+
+/var/backups/zabbix_backup_20251121_081215.sql
