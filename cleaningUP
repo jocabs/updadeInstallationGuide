@@ -24,6 +24,7 @@ If you see entries for Zabbix, the repo is still configured.
 Remove it with:
 sudo apt purge -y zabbix-release
 sudo apt update
+
 ############REMAINING FILES##############
 
 1️⃣ Check common Zabbix directories
