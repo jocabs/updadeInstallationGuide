@@ -69,4 +69,9 @@ NOTE: the backup directory is /var/backups/zabbix_backup_$BACKUP_DATE.sql
 ######### for upgrade/update new release ########
 sudo apt list --upgradable | grep zabbix
 sudo apt install --only-upgrade zabbix-server-mysql zabbix-frontend-php zabbix-apache-conf zabbix-sql-scripts zabbix-agent
+UPDATE users
+SET passwd='$2y$10$zWMmLdeUVeiBOpysWIEIMeYf57x3PYctbiWx1pvAl.7.ybloT1obW'
+WHERE username='Admin';
+EXIT;
+
 
