@@ -1,1 +1,93 @@
+Absolutely! Let’s summarize a clean, step-by-step plan to install Zabbix 7.4.6 on Debian 13 (Trixie). I’ll make it concise but complete, including server, agent, frontend, and MariaDB database.
 
+Step 1: Update the system
+sudo apt update
+sudo apt upgrade -y
+sudo apt install wget curl gnupg lsb-release -y
+
+Step 2: Add Zabbix 7.4 repository
+
+Download and install the correct repo package:
+
+wget https://repo.zabbix.com/zabbix/7.4/release/debian/pool/main/z/zabbix-release/zabbix-release_latest_7.4+debian13_all.deb
+sudo dpkg -i zabbix-release_latest_7.4+debian13_all.deb
+sudo apt update
+
+Step 3: Install Zabbix packages
+sudo apt install zabbix-server-mysql zabbix-frontend-php zabbix-sql-scripts zabbix-agent zabbix-apache-conf -y
+
+
+Use zabbix-nginx-conf instead of zabbix-apache-conf if you prefer nginx.
+
+Step 4: Install and configure MariaDB
+sudo apt install mariadb-server -y
+sudo systemctl enable --now mariadb
+sudo mysql_secure_installation
+
+
+Create the Zabbix database and user:
+
+CREATE DATABASE zabbix CHARACTER SET utf8mb4 COLLATE utf8mb4_bin;
+CREATE USER 'zabbix'@'localhost' IDENTIFIED BY 'StrongPasswordHere';
+GRANT ALL PRIVILEGES ON zabbix.* TO 'zabbix'@'localhost';
+FLUSH PRIVILEGES;
+EXIT;
+
+Step 5: Import initial database schema
+zcat /usr/share/zabbix-sql-scripts/mysql/create.sql.gz | mysql -u zabbix -p zabbix
+
+Step 6: Configure Zabbix server
+
+Edit /etc/zabbix/zabbix_server.conf:
+
+DBHost=localhost
+DBName=zabbix
+DBUser=zabbix
+DBPassword=StrongPasswordHere
+
+
+Save and exit.
+
+Step 7: Install and configure PHP
+sudo apt install php8.2 php8.2-mysql php8.2-gd php8.2-mbstring libapache2-mod-php8.2 -y
+sudo a2enmod php8.2
+sudo systemctl restart apache2
+
+
+Set timezone in /etc/php/8.2/apache2/php.ini:
+
+date.timezone = Your/Timezone
+
+Step 8: Start Zabbix services
+sudo systemctl enable --now zabbix-server zabbix-agent apache2
+
+Step 9: Complete web setup
+
+Open a browser and go to:
+
+http://YOUR_SERVER_IP/zabbix
+
+
+Follow the wizard:
+
+Select language
+
+Check prerequisites
+
+Enter DB credentials (zabbix / StrongPasswordHere)
+
+Finish installation
+
+Step 10: Default login
+
+Username: Admin
+
+Password: zabbix
+
+Change the password immediately after login.
+
+✅ After this, you have a fully working Zabbix 7.4.6 server + agent + web frontend on Debian 13.
+
+If you want, I can create a single copy-paste block of commands that installs everything automatically, including MariaDB, Zabbix, PHP, and Apache, so you don’t have to run multiple commands manually.
+
+Do you want me to do that?
