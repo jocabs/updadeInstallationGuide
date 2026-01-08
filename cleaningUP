@@ -42,6 +42,7 @@ Safe because we already removed the database and packages.
 
 3️⃣ Check for stray files elsewhere
 sudo find / -iname "*zabbix*" 2>/dev/null
+ls -ld /etc/mysql /var/lib/mysql 2>/dev/null
 
 This searches the entire filesystem for any files or folders with “zabbix” in the name.
 The 2>/dev/null hides permission errors.
