@@ -33,8 +33,23 @@ GRANT ALL PRIVILEGES ON zabbix.* TO 'zabbix'@'localhost';
 FLUSH PRIVILEGES;
 EXIT;
 
-Step 5: Import initial database schema
+###### ISSUE##### Step 5: Import initial database schema
 zcat /usr/share/zabbix-sql-scripts/mysql/create.sql.gz | mysql -u zabbix -p zabbix
+Note: Bypass this step and do this
+Step 5: 
+
+>>> Stop Zabbix to avoid writes during restore
+sudo systemctl stop zabbix-server
+>>> (You already did this, but safe to repeat) allow routine creation while binlog is on
+mysql -u root -p -e "SET GLOBAL log_bin_trust_function_creators = 1;"
+>>> Restore directly as root so DEFINER=`root`@`localhost` is valid
+mysql -u root -p zabbix < /var/backups/zabbix_backup_20251103_020808.sql
+>>> Turn the trust back off (optional but recommended)
+mysql -u root -p -e "SET GLOBAL log_bin_trust_function_creators = 0;"
+>>> Start Zabbix and watch logs
+sudo systemctl start zabbix-server
+sudo tail -n 200 /var/log/zabbix/zabbix_server.log
+
 
 Step 6: Configure Zabbix server
 
