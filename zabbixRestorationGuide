@@ -1,1 +1,45 @@
 
+✅ Restoration Summary
+Problem
+
+Restore failed initially due to DEFINER=root@localhost in triggers → ERROR 1227 (42000): Access denied.
+After successful restore, Zabbix server kept restarting → UI showed “Zabbix server is not running”.
+Root cause: CacheSize too small for configuration cache.
+
+
+Step 1: Restore Database
+Option A (Recommended): Import as root
+Shell# Stop Zabbix serversudo systemctl stop zabbix-server# Allow routine creation under binary logging (temporary)mysql -u root -p -e "SET GLOBAL log_bin_trust_function_creators = 1;"# Drop & recreate DB (optional for clean restore)mysql -u root -p -e "DROP DATABASE zabbix; CREATE DATABASE zabbix CHARACTER SET utf8mb4 COLLATE utf8mb4_bin;"# Restore backup as rootmysql -u root -p zabbix < /var/backups/zabbix_backup_20251103_020808.sql# Disable trust againmysql -u root -p -e "SET GLOBAL log_bin_trust_function_creators = 0;"Show more lines
+Option B: Strip DEFINER and import with zabbix user
+Shellcp /var/backups/zabbix_backup_20251103_020808.sql /var/backups/zbx_nodefiner.sqlsed -E 's/\/\*![0-9]{5} *DEFINER=`[^`]+`@`[^`]+`\*\/ *//g' \  /var/backups/zbx_nodefiner.sql > /var/backups/zbx_nodefiner_clean.sqlmysql -u zabbix -p zabbix < /var/backups/zbx_nodefiner_clean.sqlShow more lines
+
+Step 2: Fix CacheSize (Prevent Restart Loop)
+Edit /etc/zabbix/zabbix_server.conf:
+Shellsudo nano /etc/zabbix/zabbix_server.confShow more lines
+Change:
+CacheSize=64M
+
+(or 128M for large setups).
+Restart:
+Shellsudo systemctl restart zabbix-serverShow more lines
+
+Step 3: Verify
+Shellsudo systemctl status zabbix-serversudo tail -n 50 /var/log/zabbix/zabbix_server.logmysql -u root -p -e "SELECT * FROM zabbix.dbversion;"Show more lines
+
+✅ Performance Tuning Recommendations for Large Environments
+Edit /etc/zabbix/zabbix_server.conf and adjust:
+Parameter           Recommended Value (start point)
+CacheSize            64M – 256M (depends on hosts/items)
+HistoryCacheSize     64M – 128M
+TrendCacheSize       32M – 64M
+ValueCacheSize       64M
+Timeout              4–10 seconds
+StartPollers         50+ (depends on load)
+StartTrappers        10+
+StartDiscoverers     10+ 
+StartPreprocessors   10–20
+After changes:
+Shellsudo systemctl restart zabbix-serverShow more lines
+
+✅ Root cause: DEFINER mismatch during restore + insufficient CacheSize after restore.
+✅ Fix: Import as root (or strip DEFINER) + increase CacheSize + tune other caches for performance.
