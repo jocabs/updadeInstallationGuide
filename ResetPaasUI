@@ -1,1 +1,16 @@
+🔹 Option 3: Reset password via CLI (required if UI login fails)
 
+Use this if phpMyAdmin / Workbench won’t let you in.
+
+1️⃣ Login without password
+sudo mysql
+
+2️⃣ Reset password
+ALTER USER 'root'@'localhost'
+IDENTIFIED WITH mysql_native_password
+BY 'NewStrongPassword';
+FLUSH PRIVILEGES;
+EXIT;
+
+3️⃣ Restart MySQL
+sudo systemctl restart mysql
