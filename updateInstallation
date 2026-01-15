@@ -28,7 +28,7 @@ sudo mysql_secure_installation
 Create the Zabbix database and user:
 
 CREATE DATABASE zabbix CHARACTER SET utf8mb4 COLLATE utf8mb4_bin;
-CREATE USER 'zabbix'@'localhost' IDENTIFIED BY 'StrongPasswordHere';
+CREATE USER 'zabbix'@'localhost' IDENTIFIED BY 'zabbix';
 GRANT ALL PRIVILEGES ON zabbix.* TO 'zabbix'@'localhost';
 FLUSH PRIVILEGES;
 EXIT;
