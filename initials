@@ -1,1 +1,104 @@
 
+df -h
+ 1502  lsb_release -a
+ 1503  sudo apt update
+ 1504  sudo apt upgrade -y
+ 1505  sudo apt install wget gnupg2 curl lsb-release -y
+ 1506  wget https://repo.zabbix.com/zabbix-official-repo.key
+ 1507  sudo gpg --dearmor -o /usr/share/keyrings/zabbix-archive-keyring.gpg zabbix-official-repo.key
+ 1508  echo "deb [signed-by=/usr/share/keyrings/zabbix-archive-keyring.gpg] https://repo.zabbix.com/zabbix/7.4/debian trixie main" | sudo tee /etc/apt/sources.list.d/zabbix.list
+ 1509  sudo apt update
+ 1510  sudo apt install zabbix-server-mysql zabbix-frontend-php zabbix-apache-conf zabbix-sql-scripts zabbix-agent -y
+ 1511  sudo rm /etc/apt/sources.list.d/zabbix.list
+ 1512  sudo tee /etc/apt/sources.list.d/zabbix.list <<EOF
+ 1513  deb [signed-by=/usr/share/keyrings/zabbix-archive-keyring.gpg] https://repo.zabbix.com/zabbix/7.4/stable/debian trixie main
+ 1514  EOF
+ 1515  wget https://repo.zabbix.com/zabbix-official-repo.key
+ 1516  sudo gpg --dearmor -o /usr/share/keyrings/zabbix-archive-keyring.gpg zabbix-official-repo.key
+ 1517  sudo apt update
+ 1518  sudo apt install zabbix-server-mysql zabbix-frontend-php zabbix-apache-conf zabbix-sql-scripts zabbix-agent -y
+ 1519  sudo apt install mariadb-server -y
+ 1520  sudo ls /etc/mysql/
+ 1521  sudo ls /etc/mysql/mariadb.conf.d/
+ 1522  sudo mysql_secure_installation
+ 1523  sudo mysql -u root -p
+ 1524  zcat /usr/share/doc/zabbix-sql-scripts/mysql/create.sql.gz | mysql -u zabbix -p zabbix
+ 1525  sudo zcat /usr/share/zabbix-sql-scripts/mysql/server.sql.gz | mysql -u zabbix -p zabbix
+ 1526  ls /usr/share/zabbix/sql-scripts/mysql/
+ 1527  sudo zcat /usr/share/zabbix/sql-scripts/mysql/server.sql.gz | mysql -u zabbix -p zabbix
+ 1528  mysql -u zabbix -p zabbix -e "SHOW TABLES;"
+ 1529  sudo nano /etc/zabbix/zabbix_server.conf
+ 1530  sudo ls /etc/php/*/apache2/
+ 1531  sudo nano /etc/php/8.4/apache2/php.ini
+ 1532  lsb_release -a
+ 1533  sudo ls /etc/zabbix/
+ 1534  sudo sudo /etc/zabbix/apache.conf
+ 1535  sudo nano /etc/zabbix/apache.conf
+ 1536  sudo ls /etc/php/8.2/apache2
+ 1537  sudo ls /etc/php/8.4/apache2
+ 1538  sudo nano /etc/php/8.4/apache2/php.ini
+ 1539  sudo a2enconf zabbix
+ 1540  sudo systemctl restart apache2
+ 1541  sudo systemctl restart zabbix-server zabbix-agent apache2
+ 1542  sudo systemctl enable zabbix-server zabbix-agent apache2
+ 1543  sudo apt update
+ 1544  sudo apt install php8.2 php8.2-cli php8.2-fpm php8.2-mysql php8.2-gd php8.2-xml php8.2-bcmath php8.2-mbstring php8.2-json php8.2-curl libapache2-mod-php8.2 -y
+ 1545  wget https://repo.zabbix.com/zabbix/7.4/stable/debian/pool/main/z/zabbix-release/zabbix-release_7.4-1+debian13_all.deb
+ 1546  sudo dpkg -i zabbix-release_7.4-1+debian13_all.deb
+ 1547  sudo apt update
+ 1548  wget https://repo.zabbix.com/zabbix/7.4/release/debian/pool/main/z/zabbix-release/zabbix-release_latest_7.4+debian13_all.deb
+ 1549  sudo dpkg -i zabbix-release_latest_7.4+debian13_all.deb
+ 1550  sudo apt update
+ 1551  sudo apt install zabbix-server-mysql zabbix-frontend-php zabbix-sql-scripts zabbix-agent -y
+ 1552  sudo apt install zabbix-apache-conf
+ 1553  echo "<?php phpinfo(); ?>" | sudo tee /var/www/html/info.php
+ 1554  mysql -u zabbix -p zabbix -e "SHOW TABLES;"
+ 1555  sudo mysql -u root -p
+ 1556  sudo ls /var/backups/zabbix_backup_20251
+ 1557  sudo ls /var/backups/
+ 1558  sudo sudo bash -c "mysqldump -u root -p zabbix > /var/backups/zabbix_backup_20251121_081215.sql
+ 1559  sudo bash -c "mysqldump -u root -p zabbix > /var/backups/zabbix_backup_20251121_081215.sql
+ 1560  sudo systemctl stop zabbix-server
+ 1561  sudo systemctl stop zabbix-agent
+ 1562  sudo systemctl stop apache2   # or nginx
+ 1563  sudo bash -c "mysqldump -u root -p zabbix < /var/backups/zabbix_backup_20251121_081215.sql"
+ 1564  sudo mysqldump -u root -p zabbix > /var/backups/zabbix_backup_20251121_081215.sql
+ 1565  sudo bash -c "mysqldump -u root -p zabbix > /var/backups/zabbix_backup_20251121_081215.sql"
+ 1566  sudo systemctl start zabbix-server
+ 1567  sudo systemctl start zabbix-agent
+ 1568  sudo systemctl start apache2   # or nginx
+ 1569  sudo cat /etc/zabbix/zabbix_server.conf
+ 1570  sudo nano /etc/zabbix/zabbix_server.conf
+ 1571  sudo systemctl restart zabbix-server
+ 1572  sudo systemctl restart apache2
+ 1573  history
+ 1574  mysql -u zabbix -p zabbix -e "SHOW TABLES;"
+ 1575  sudo nano /etc/zabbix/zabbix_server.conf
+ 1576  sudo systemctl restart zabbix-server
+ 1577  sudo systemctl restart apache2
+ 1578  sudo mysql
+ 1579  sudo systemctl restart mariadb
+ 1580  mysql -u root -p
+ 1581  sudo systemctl stop zabbix-server
+ 1582  sudo systemctl stop apache2
+ 1583  sudo bash -c "mysql -u root -p zabbix < /var/backups/zabbix_backup_20251121_081215.sql"
+ 1584  sudo systemctl start zabbix-server
+ 1585  sudo systemctl start apache2
+ 1586  sudo mysql -u root -p
+ 1587  zabbix
+ 1588  sudo mysql -u root -p
+ 1589  mysql -u root -p -e "USE zabbix; SHOW TABLES LIMIT 5;"
+ 1590  mysql -u root -p -e "SELECT table_name FROM information_schema.tables WHERE table_schema='zabbix' LIMIT 5;"
+ 1591  sudo systemctl start zabbix-server
+ 1592  sudo systemctl start zabbix-agent
+ 1593  sudo systemctl start apache2   # if you use Apache, or nginx if that's your web server
+ 1594  tail -f /var/log/zabbix/zabbix_server.log
+ 1595  sudo tail -f /var/log/zabbix/zabbix_server.log
+ 1596  sudo cat /etc/zabbix/web/zabbix.conf.php
+ 1597  sudo nano /etc/zabbix/zabbix_server.conf
+ 1598  sudo systemctl restart zabbix-server
+ 1599  sudo systemctl restart apache2
+ 1600  sudo tail -50 /var/log/zabbix/zabbix_server.log
+ 1601  mysql -u root -p
+1855  wget -O /tmp/google-chrome.deb https://dl.google.com/linux/direct/google-chrome-stable_current_amd64.deb
+ 1856  sudo apt-get install -y /tmp/google-chrome.deb
